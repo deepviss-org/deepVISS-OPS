@@ -595,7 +595,8 @@
           "metric": {
             "description": "The recommended type of metric used ",
             "type": "string",
-            "example": "Euclidean tripartite loss function",
+            "example":"euclidean",
+            "description": "Euclidean tripartite loss function",
             "enum": [
               "euclidean",
               "manhattan",
