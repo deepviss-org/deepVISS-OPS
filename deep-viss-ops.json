@@ -955,7 +955,7 @@
     }
   },
   "externalDocs": {
-    "description": "Find out more about DeepVISS",
+    "description": "Deep vision interoperability specification standard (DeepVISS) reduces integration time, complexity and defects by using a standardized, language-agnostic, cross-platform schema",
     "url": "https://deepviss.org"
   }
 }
