@@ -656,9 +656,10 @@
             "description": "The type of the attribute, to be used in higher order processing and logic.",
             "type": "string",
             "enum": [
-              "string",
+              "lexicographic",
               "hex-color",
-              "integer"
+              "integer",
+              "double"
             ]
           }
         }
