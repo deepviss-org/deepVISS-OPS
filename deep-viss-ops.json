@@ -70,14 +70,14 @@
         }
       }
     },
-    "/analysis/ProcessingRequest": {
+    "/analysis/wrappedImage": {
       "post": {
         "tags": [
           "analysis"
         ],
         "summary": "Analyze a specific frame",
         "description": "",
-        "operationId": "ProcessingRequest",
+        "operationId": "wrappedImage",
         "parameters": [
           {
             "in": "query",
@@ -124,14 +124,14 @@
         }
       }
     },
-    "/analysis/ImagesArray": {
+    "/analysis/imageArray": {
       "post": {
         "tags": [
           "analysis"
         ],
         "summary": "Analyze an array of images",
         "description": "",
-        "operationId": "ImageArrayAnalysis",
+        "operationId": "imageArrayAnalysis",
         "parameters": [
           {
             "in": "query",
@@ -181,14 +181,14 @@
         }
       }
     },
-    "/analysis/Image": {
+    "/analysis/image": {
       "post": {
         "tags": [
           "analysis"
         ],
         "summary": "Analyze a single image",
         "description": "",
-        "operationId": "ImageAnalysis",
+        "operationId": "imageAnalysis",
         "parameters": [
           {
             "in": "query",
