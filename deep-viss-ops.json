@@ -241,6 +241,34 @@
   },
   "components": {
     "schemas": {
+      "Histogram": {
+        "type": "object",
+        "properties": {
+          "frequencyArray": {
+            "description": "The URL where the image is stored.",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "minValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "spacing": {
+            "type": "string",
+            "description": "The spacing assumed for the points where frequency is measured",
+            "enum": [
+              "equally_spaced"
+            ]
+          }
+        }
+      },
       "Frame": {
         "type": "object",
         "properties": {
@@ -470,25 +498,25 @@
           "pixelCount": {
             "type": "integer",
             "format": "int32",
-            "description": "Number of frame which have been successfully captured.",
+            "description": "Number of pixels from the frames which have been successfully captured.",
             "example": 86537
           },
           "frameCount": {
             "type": "integer",
             "format": "int32",
-            "description": "Number of frame which have been successfully captured.",
+            "description": "Number of frames which have been successfully captured.",
             "example": 86537
           },
           "objectCount": {
             "type": "integer",
             "format": "int32",
-            "description": "Number of frame which have been successfully captured.",
+            "description": "Number of objects detected in the frames which have been analyzed which have been successfully captured.",
             "example": 86537
           },
           "lantencyCount": {
             "type": "integer",
             "format": "int64",
-            "description": "Sum of microseconds ",
+            "description": "Sum of microseconds",
             "example": 86537
           },
           "processedFrames": {
@@ -508,6 +536,10 @@
             "format": "int32",
             "description": "Number of errors, dropped or missed frames from processing",
             "example": 86537
+          },
+          "latencyDistribution":
+          {
+            "type": "Histogram"
           }
         }
       },
