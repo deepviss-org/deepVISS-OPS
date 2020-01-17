@@ -70,14 +70,14 @@
         }
       }
     },
-    "/analysis/ProcessingRequest": {
+    "/analysis/wrappedImage": {
       "post": {
         "tags": [
           "analysis"
         ],
         "summary": "Analyze a specific frame",
         "description": "",
-        "operationId": "ProcessingRequest",
+        "operationId": "wrappedImage",
         "parameters": [
           {
             "in": "query",
@@ -124,14 +124,14 @@
         }
       }
     },
-    "/analysis/ImagesArray": {
+    "/analysis/imageArray": {
       "post": {
         "tags": [
           "analysis"
         ],
         "summary": "Analyze an array of images",
         "description": "",
-        "operationId": "ImageArrayAnalysis",
+        "operationId": "imageArrayAnalysis",
         "parameters": [
           {
             "in": "query",
@@ -181,14 +181,14 @@
         }
       }
     },
-    "/analysis/Image": {
+    "/analysis/image": {
       "post": {
         "tags": [
           "analysis"
         ],
         "summary": "Analyze a single image",
         "description": "",
-        "operationId": "ImageAnalysis",
+        "operationId": "imageAnalysis",
         "parameters": [
           {
             "in": "query",
@@ -466,15 +466,29 @@
       },
       "SourceStatus": {
         "type": "object",
-        "required": [
-          "id",
-          "name"
-        ],
         "properties": {
-          "ingestedFrame": {
+          "pixelCount": {
             "type": "integer",
             "format": "int32",
             "description": "Number of frame which have been successfully captured.",
+            "example": 86537
+          },
+          "frameCount": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of frame which have been successfully captured.",
+            "example": 86537
+          },
+          "objectCount": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of frame which have been successfully captured.",
+            "example": 86537
+          },
+          "lantencyCount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Sum of microseconds ",
             "example": 86537
           },
           "processedFrames": {
