@@ -197,6 +197,14 @@
               "type": "string"
             },
             "description": "The identifier of the stream"
+          },
+          {
+            "in": "query",
+            "name": "detectorName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the detector to use"
           }
         ],
         "requestBody": {
@@ -276,6 +284,7 @@
             "description": "Defines the several timestamps of acquisition, reception, pre-processing and post-processing respectively.",
             "type": "array",
             "items": {
+              "$ref": "#/definitions/FrameTimestamp",
               "type": "FrameTimestamp"
             }
           },
@@ -296,11 +305,13 @@
           },
           "image": {
             "type": "Image",
+            "$ref": "#/definitions/Image",
             "description": "Image information"
           },
           "events": {
             "type": "array",
             "items": {
+              "$ref": "#/definitions/Event",
               "type": "Event"
             }
           },
@@ -315,24 +326,12 @@
             "additionalProperties": {
               "type": "string"
             }
-          }
-        }
-      },
-      "Image": {
-        "type": "object",
-        "properties": {
-          "imageURL": {
-            "description": "The URL where the image is stored.",
-            "type": "string"
           },
-          "imageBase64": {
-            "type": "string",
-            "format": "byte",
-            "description": "Base64 encoded string of the image."
-          },
-          "imageContentType": {
-            "type": "string",
-            "description": "Image MIME-type, such as image/png or image/jpeg"
+          "sourceTimestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "source timestamp for frame in microseconds",
+            "example": 86537
           }
         }
       },
@@ -372,30 +371,36 @@
             "description": "What are the inferred attributes of the object?",
             "type": "array",
             "items": {
+              "$ref": "#/definitions/Attribute",
               "type": "Attribute"
             }
           },
           "tracking": {
             "type": "Tracking",
+            "$ref": "#/definitions/Tracking",
             "description": "Tracking id and tracking detection"
           },
           "detection": {
             "type": "Detection",
+            "$ref": "#/definitions/Detection",
             "description": "Detection information"
           },
           "features": {
             "type": "Features",
+            "$ref": "#/definitions/Features",
             "description": "[DEPRECATED] The main features of detectected object."
           },
           "featuresMap": {
             "description": "What are the secondary features extracted from the detected object?",
             "type": "array",
             "items": {
+              "$ref": "#/definitions/Features",
               "type": "Features"
             }
           },
           "processedImage": {
             "type": "Image",
+            "$ref": "#/definitions/Image",
             "description": "Any post-processing image returned for this event."
           }
         }
@@ -405,10 +410,12 @@
         "properties": {
           "boundingRectangle": {
             "type": "BoundingRectangle",
+            "$ref": "#/definitions/BoundingRectangle",
             "description": "Where in the frame has the object been detected?"
           },
           "orientation": {
             "type": "Orientation",
+            "$ref": "#/definitions/Orientation",
             "description": "What is the geometric orientation of the detected object or event?"
           },
           "algorithm": {
@@ -427,6 +434,7 @@
             "description": "What are the keypoints of the object??",
             "type": "array",
             "items": {
+              "$ref": "#/definitions/KeypointsSegment",
               "type": "KeypointsSegment"
             }
           },
@@ -438,62 +446,12 @@
           }
         }
       },
-      "BoundingRectangle": {
-        "type": "object",
-        "required": [
-          "top",
-          "left",
-          "width",
-          "height"
-        ],
-        "properties": {
-          "top": {
-            "description": "Top-most position, in pixels, of of the bounding rectangle",
-            "type": "integer",
-            "format": "int32",
-            "example": 32
-          },
-          "left": {
-            "description": "Left-most position, in pixels, of of the bounding rectangle",
-            "type": "integer",
-            "format": "int32",
-            "example": 57
-          },
-          "width": {
-            "description": "Width, in pixels, of the bounding rectangle",
-            "type": "integer",
-            "format": "int32",
-            "example": 237
-          },
-          "height": {
-            "description": "Height, in pixels, of the bounding rectangle",
-            "type": "integer",
-            "format": "int32",
-            "example": 352
-          }
-        }
-      },
-      "Point2D": {
-        "type": "object",
-        "required": [
-          "x",
-          "y"
-        ],
-        "properties": {
-          "x": {
-            "description": "X-coordinate as integer number of pixels measured from the left to the right.",
-            "type": "integer",
-            "format": "int32"
-          },
-          "y": {
-            "description": "Y-coordinate as integer number of pixels measured from the top to the bottom.",
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "SourceStatus": {
         "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
         "properties": {
           "pixelCount": {
             "type": "integer",
@@ -537,8 +495,8 @@
             "description": "Number of errors, dropped or missed frames from processing",
             "example": 86537
           },
-          "latencyDistribution":
-          {
+          "latencyDistribution": {
+            "$ref": "#/definitions/Histogram",
             "type": "Histogram"
           }
         }
@@ -585,28 +543,22 @@
           "connection": {
             "description": "Details on connection.",
             "type": "SourceConnection"
-          }
-        }
-      },
-      "Orientation": {
-        "type": "object",
-        "required": [
-        ],
-        "properties": {
-          "yaw": {
-            "description": "The yaw of the detected object or event.",
-            "type": "number",
-            "format": "double"
           },
-          "pitch": {
-            "description": "The pitch of the detected object or event.",
-            "type": "number",
-            "format": "double"
+          "status": {
+            "description": "Current status of the source",
+            "type": "string",
+            "enum": [
+              "processing",
+              "completed",
+              "queue",
+              "active",
+              "inactive"
+            ]
           },
-          "roll": {
-            "description": "The roll of the detected object or event.",
-            "type": "number",
-            "format": "double"
+          "privacyIndication": {
+            "description": "The recommended type of metric used ",
+            "type": "PrivacyIndication",
+            "$ref": "#/definitions/PrivacyIndication"
           }
         }
       },
@@ -633,11 +585,13 @@
           },
           "privacy": {
             "description": "The recommended type of metric used ",
-            "type": "PrivacyIndication"
+            "type": "PrivacyIndication",
+            "$ref": "#/definitions/PrivacyIndication"
           },
           "metric": {
             "description": "The recommended type of metric used ",
-            "type": "Metric"
+            "type": "Metric",
+            "$ref": "#/definitions/Metric"
           },
           "threshold": {
             "description": "The value of the metric threshold",
@@ -700,12 +654,14 @@
         "properties": {
           "image": {
             "type": "Image",
+            "$ref": "#/definitions/Image",
             "description": "Image information"
           },
           "regionsOfInterest": {
             "description": "Define any regions of interest, defined by bounding boxes, where the processing should focus.",
             "type": "array",
             "items": {
+              "$ref": "#/definitions/BoundingRectangle",
               "type": "BoundingRectangle"
             }
           },
@@ -729,47 +685,6 @@
           "sourceId": {
             "type": "string",
             "description": "Video source id."
-          }
-        }
-      },
-      "GeoPosition": {
-        "type": "object",
-        "required": [
-          "latitude",
-          "longitude"
-        ],
-        "properties": {
-          "latitude": {
-            "description": "The latitude at which the video source is installed.",
-            "type": "number",
-            "format": "double"
-          },
-          "longitude": {
-            "description": "The longitude at which the video source is installed.",
-            "type": "number",
-            "format": "double"
-          },
-          "altitude": {
-            "description": "The altitude at which the video source is installed.",
-            "type": "number",
-            "format": "double"
-          },
-          "elevation": {
-            "description": "The elevation from the ground at which the video source is installed, measured in meters.",
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "KeypointsSegment": {
-        "type": "object",
-        "properties": {
-          "keypoints" : {
-            "description" : "Collection of key-points, grouped in a map with keys representing names and values represented by a value of points.",
-            "type": "array",
-            "items": {
-              "type": "Point2D"
-            }
           }
         }
       },
@@ -829,7 +744,8 @@
           },
           "metric": {
             "description": "The metric used for comparing collection objects ",
-            "type": "Metric"
+            "type": "Metric",
+            "$ref": "#/definitions/Metric"
           },
           "threshold": {
             "description": "The recommended metric value recommended to be used as threshold",
@@ -839,6 +755,7 @@
           },
           "profiles": {
             "type": "ObjectProfile",
+            "$ref": "#/definitions/ObjectProfile",
             "description": "List of ObjectProfiles. All profiles must be of the same type as the collection object type."
           }
         }
@@ -873,6 +790,7 @@
             "description": "The list of object instances statically assigned to the object profile.",
             "type": "array",
             "items": {
+              "$ref": "#/definitions/ObjectInstance",
               "type": "ObjectInstance"
             }
           },
@@ -886,6 +804,7 @@
             "description": "The list of object instances dynamically assigned to the object profile.",
             "type": "array",
             "items": {
+              "$ref": "#/definitions/ObjectOccurrence",
               "type": "ObjectOccurrence"
             }
           }
@@ -904,10 +823,12 @@
           },
           "image": {
             "type": "Image",
+            "$ref": "#/definitions/Image",
             "description": "Original image information associated with the ObjectInstance"
           },
           "features": {
             "type": "Features",
+            "$ref": "#/definitions/Features",
             "description": "What are the features extracted from the detected object?"
           }
         }
@@ -921,6 +842,7 @@
           },
           "timestamp": {
             "type": "FrameTimestamp",
+            "$ref": "#/definitions/FrameTimestamp",
             "description": "The timestamp of the frame from which match originated."
           },
           "eventId": {
@@ -935,6 +857,7 @@
             "description": "The list of profile that object matched as compared to a list of collections, at a specific time",
             "type": "array",
             "items": {
+              "$ref": "#/definitions/ObjectMatch",
               "type": "ObjectMatch"
             }
           }
@@ -1026,9 +949,13 @@
             "description": "Is retention of the object allowed?",
             "type": "boolean"
           },
+          "retentionOfLocalizedSnapshotsAllowed": {
+            "description": "Is retention of the cropped object allowed?",
+            "type": "boolean"
+          },
           "scheduledEvictionTime": {
-            "type": "string",
-            "pattern": "/^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(.[0-9]+)?(Z)?$/g",
+            "type": "integer",
+            "format": "int64",
             "description": "Date and time expressed according to ISO 8601 (e.g. 2018-06-24T23:10:28+03:00) of when this data is expected to be collected."
           }
         }
@@ -1039,6 +966,7 @@
           "profiles": {
             "type": "array",
             "items": {
+              "$ref": "#/definitions/ObjectProfile",
               "type": "ObjectProfile"
             }
           }
@@ -1050,19 +978,40 @@
           "frames": {
             "type": "array",
             "items": {
+              "$ref": "#/definitions/Frame",
               "type": "Frame"
             }
           },
           "occurrences": {
             "type": "array",
             "items": {
+              "$ref": "#/definitions/ObjectOccurrence",
               "type": "ObjectOccurrence"
             }
           },
           "prefetch": {
+            "$ref": "#/definitions/PackedPrefetch",
             "type": "PackedPrefetch"
           }
         }
+      },
+      "Image": {
+        "$ref": "https://raw.githubusercontent.com/deepviss-org/deepVISS-COMMON/master/deep-viss-common.json#/components/schemas/Image"
+      },
+      "Point2D": {
+        "$ref": "https://raw.githubusercontent.com/deepviss-org/deepVISS-COMMON/master/deep-viss-common.json#/components/schemas/Point2D"
+      },
+      "KeypointsSegment": {
+        "$ref": "https://raw.githubusercontent.com/deepviss-org/deepVISS-COMMON/master/deep-viss-common.json#/components/schemas/KeypointsSegment"
+      },
+      "BoundingRectangle": {
+        "$ref": "https://raw.githubusercontent.com/deepviss-org/deepVISS-COMMON/master/deep-viss-common.json#/components/schemas/BoundingRectangle"
+      },
+      "GeoPosition": {
+        "$ref": "https://raw.githubusercontent.com/deepviss-org/deepVISS-COMMON/master/deep-viss-common.json#/components/schemas/GeoPosition"
+      },
+      "Orientation": {
+        "$ref": "https://raw.githubusercontent.com/deepviss-org/deepVISS-COMMON/master/deep-viss-common.json#/components/schemas/Orientation"
       }
     }
   },
